@@ -13,6 +13,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float mouseSensivity = 2f;
     [SerializeField] private float lookLimit = 90f;
 
+    [Header("Animation")]
+    [SerializeField] private Animator animator;
+
     private float xRotation = 0;
 
     private void Start()
@@ -33,6 +36,8 @@ public class PlayerMovement : MonoBehaviour
 
         Vector3 direction = new Vector3(horizontalInput, 0, verticalInput);
         direction = transform.rotation * direction;
+
+        animator.SetBool("IsRunning", direction != Vector3.zero);
 
         characterController.Move(direction * speed * Time.deltaTime);
 

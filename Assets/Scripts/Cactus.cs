@@ -2,12 +2,15 @@
 
 public class Cactus : MonoBehaviour
 {
+    [SerializeField] private Vector3 offset;
+    [SerializeField] private Vector3 size;
+
     private void FixedUpdate()
     {
         if (Physics.BoxCast(
-            transform.position, 
-            transform.localScale / 2, 
-            Vector3.zero, 
+            transform.position + offset, 
+            size / 2, 
+            Vector3.up, 
             out var hitInfo)
         )
         {
@@ -16,5 +19,10 @@ public class Cactus : MonoBehaviour
                 health.Damage(1);
             }
         }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.DrawWireCube(transform.position + offset, size);
     }
 }
