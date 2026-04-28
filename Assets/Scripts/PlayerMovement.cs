@@ -2,6 +2,9 @@
 
 public class PlayerMovement : MonoBehaviour
 {
+    private static readonly int IsRunning = Animator.StringToHash("IsRunning");
+    private static readonly int IsJumping = Animator.StringToHash("IsJumping");
+
     [Header("Move")]
     [SerializeField] private CharacterController characterController;
     [SerializeField] private float speed = 5;
@@ -37,7 +40,7 @@ public class PlayerMovement : MonoBehaviour
         Vector3 direction = new Vector3(horizontalInput, 0, verticalInput);
         direction = transform.rotation * direction;
 
-        animator.SetBool("IsRunning", direction != Vector3.zero);
+        animator.SetBool(IsRunning, direction != Vector3.zero);
 
         characterController.Move(direction * speed * Time.deltaTime);
 
