@@ -20,6 +20,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Animator animator;
 
     private float xRotation = 0;
+    private float verticalVelocity = 0;
 
     private void Start()
     {
@@ -40,21 +41,28 @@ public class PlayerMovement : MonoBehaviour
         Vector3 direction = new Vector3(horizontalInput, 0, verticalInput);
         direction = transform.rotation * direction;
 
-        animator.SetBool(IsRunning, direction != Vector3.zero);
-
-        characterController.Move(direction * speed * Time.deltaTime);
+        animator.SetBool(IsRunning, direction != Vector3.zero && characterController.isGrounded);
 
         if (characterController.isGrounded)
         {
             if (Input.GetButton("Jump"))
             {
-                characterController.Move(Vector3.up * jumpForce);
+                verticalVelocity = jumpForce;
+                animator.SetBool(IsJumping, true);
+            }
+            else
+            {
+                verticalVelocity = -0.1f;
+                animator.SetBool(IsJumping, false);
             }
         }
         else
         {
-            characterController.Move(Vector3.down * gravityForce * Time.deltaTime);
+            verticalVelocity -= gravityForce * Time.deltaTime;
         }
+
+        var velocity = direction * speed + verticalVelocity * Vector3.up;
+        characterController.Move(velocity * Time.deltaTime);
     }
 
     private void Look()
